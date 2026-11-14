@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primer mes</title>
+<style>
+  html,body{margin:0;height:100%;background:#1a1226;display:flex;align-items:center;justify-content:center}
+  canvas{max-width:100%;max-height:100%;aspect-ratio:16/9;background:#2a1b3d}
+</style>
+</head>
+<body>
+<canvas id="c" width="960" height="540"></canvas>
+<script>
+/* =====================================================================
+   ✏️  AQUÍ EDITAS TODOS LOS TEXTOS DEL JUEGO
+   ===================================================================== */
+const TITULO = "Segundo mes";
+const SUBTITULO = "Para ti mi reina, con todo mi amor";   // <- texto de la pantalla de inicio
+
+// Textos que aparecen mientras avanza. "x" = punto del mapa donde se activan
+// (el nivel mide 12000 px). Puedes agregar o quitar líneas siguiendo el formato.
+const MENSAJES = [
+  // Este nivel usa un solo texto: la carta del final. Si quieres uno extra en el mapa,
+  // quita las // de la siguiente línea, edítalo y ajusta la x:
+  // { x: 2300, texto: "ESCRIBE AQUÍ EL TEXTO" },
+];
+
+// La carta que le entrega el hombre del final. Va entre comillas invertidas (`...`):
+// deja una línea en blanco entre párrafos. Si es larga, ella la lee desplazándose con ↑ ↓ o la rueda del mouse.
+const CARTA_TITULO = "Para mi amor";
+const CARTA = `Tani, llevo un rato pensando en cómo decirte todo esto y creo que, por más que lo intente, nunca voy a encontrar las palabras exactas para explicar lo que significas para mí.
+
+Hay personas que llegan a nuestra vida y simplemente pasan. Las conoces, compartes momentos con ellas y después todo sigue su camino. Pero contigo fue diferente. Lo que empezó como algo completamente normal terminó convirtiéndose en una de las partes más importantes de mi vida.
+
+Y lo curioso es que nunca planeé que sucediera.
+
+Simplemente empezamos a hablar, a compartir más cosas, a conocernos poco a poco y, cuando me di cuenta, ya eras alguien a quien buscaba cuando tenía algo que contar, alguien con quien quería compartir mis días y alguien cuya presencia podía cambiar completamente cómo me sentía.
+
+Creo que una de las cosas que más amo de ti es que nunca sentí que tuviera que ganarme tu cariño.
+
+Tú simplemente me lo diste.
+
+Y puede parecer algo pequeño, pero para mí significa muchísimo.
+
+Después de algunas cosas que viví, llegué a pensar que querer demasiado era un error. Que mostrar demasiado lo que siento podía terminar alejando a las personas. Que quizá debía aprender a guardar ciertas cosas para mí y no demostrar tanto.
+
+Pero entonces apareciste tú y, sin decirme directamente que estaba equivocado, me hiciste entenderlo.
+
+Me hiciste sentir que podía querer sin tener que estar contando cuánto daba y cuánto recibía.
+
+Que podía hablarte cuando necesitara hacerlo.
+
+Que podía preocuparme por ti.
+
+Que podía decirte que te extraño.
+
+Que podía emocionarme por cualquier cosa que tuviera que ver contigo.
+
+Que podía tener uno de mis ataques de cariño y escribirte un mensaje enorme sin sentir que estaba haciendo algo malo.
+
+Y eso me gusta muchísimo.
+
+Porque contigo no siento que tenga que esconder esa parte de mí.
+
+Contigo puedo ser el chico que se emociona demasiado, el que quiere saber cómo estuvo tu día, el que se preocupa cuando algo no está bien, el que quiere celebrar contigo hasta las cosas más pequeñas y el que de repente se queda pensando en ti sin ninguna razón.
+
+Y sí, probablemente a veces sea demasiado jajaja.
+
+Pero si alguna vez me ves así, quiero que sepas que no es porque espere algo de ti.
+
+Es simplemente porque me importas.
+
+Me nace quererte.
+
+Me nace cuidarte.
+
+Me nace escucharte.
+
+Me nace estar pendiente de ti.
+
+Y me nace recordarte lo especial que eres.
+
+Porque tú también has hecho muchas cosas por mí que quizá para ti fueron normales, pero que yo nunca voy a olvidar.
+
+Has estado presente en momentos en los que fácilmente podrías haberte alejado. Me has escuchado cuando tenía demasiadas cosas en la cabeza y has sabido acompañarme incluso cuando yo ni siquiera sabía explicar qué me pasaba.
+
+Y creo que ahí entendí algo muy importante sobre ti.
+
+No solamente eres alguien a quien amo.
+
+Eres alguien en quien confío.
+
+Y para mí eso vale muchísimo.
+
+Porque no quiero que seas solamente la persona con la que comparto mis momentos felices. Quiero que también seas esa persona con la que pueda hablar cuando algo me pesa, cuando tengo miedo, cuando estoy confundido o cuando simplemente necesito que alguien esté ahí.
+
+Y quiero darte exactamente lo mismo.
+
+No quiero que tengas que esconder tus días malos conmigo.
+
+No quiero que sientas que tienes que estar bien todo el tiempo.
+
+Si algún día estás cansada, quiero acompañarte.
+
+Si estás feliz, quiero celebrarlo contigo.
+
+Si algo te preocupa, quiero escucharte.
+
+Si necesitas estar sola, voy a respetarlo.
+
+Y si simplemente necesitas que alguien se quede a tu lado sin decir demasiado, también quiero poder ser esa persona.
+
+No porque crea que puedo solucionar todos tus problemas, sino porque no quiero que tengas que enfrentarlos sintiendo que estás sola.
+
+También quiero que sepas algo que quizá nunca te digo de esta manera.
+
+No te amo porque piense que eres perfecta.
+
+Te amo porque eres tú.
+
+Por tu forma de ser, por tus pequeñas manías, por la manera en la que hablas, por cómo reaccionas a ciertas cosas, por tus ocurrencias, por tus momentos de seriedad y por esos momentos en los que simplemente eres tú sin intentar demostrar nada.
+
+Me gusta conocerte.
+
+Me gusta descubrir cosas nuevas de ti.
+
+Me gusta saber qué te hace feliz, qué te molesta, qué te emociona y qué cosas pasan por tu cabeza.
+
+Porque cada vez que conozco un poquito más de ti, siento que tengo una nueva razón para quererte.
+
+Y aunque muchas veces te digo que eres hermosa, siento que esa palabra se queda corta.
+
+No hablo solamente de tu apariencia.
+
+Hablo de esa sensación que me da estar contigo.
+
+De esa tranquilidad que siento cuando hablamos.
+
+De esa sonrisa que puede cambiarme el ánimo.
+
+De esa forma que tienes de hacer que un momento cualquiera termine siendo un recuerdo que quiero guardar.
+
+Si pudiera prestarte mis ojos por un momento, probablemente entenderías por qué a veces me quedo mirándote tanto.
+
+Entenderías por qué me emociono tanto contigo.
+
+Entenderías por qué me cuesta explicar lo que siento.
+
+Porque desde donde yo te veo, hay algo en ti que simplemente me parece increíble.
+
+Y quizás por eso me nace querer darte tanto.
+
+Quiero que tengas siempre un lugar donde puedas sentirte querida.
+
+Quiero que cuando tengas un día horrible recuerdes que hay alguien que está feliz de tenerte en su vida.
+
+Quiero que cuando dudes de ti misma recuerdes que yo veo en ti muchas cosas que quizá tú no alcanzas a ver.
+
+Y quiero que nunca pienses que tienes que hacer algo extraordinario para merecer mi cariño.
+
+No tienes que hacerlo.
+
+Ya eres suficiente siendo tú.
+
+A veces me pongo a pensar en todo lo que tuvo que pasar para que termináramos encontrándonos y me parece increíble.
+
+Entre tantas personas, tantos días y tantos caminos diferentes, terminé conociéndote a ti.
+
+Y sinceramente, no cambiaría eso.
+
+Porque si todas las cosas que viví me llevaron hasta conocerte, entonces incluso los momentos difíciles terminaron dejando algo bueno en mi vida.
+
+Tú.
+
+Por eso no quiero prometerte que nunca tendremos problemas, porque sería mentirte.
+
+Tampoco quiero decirte que todo será perfecto, porque sé que no será así.
+
+Quiero algo mucho más sencillo.
+
+Quiero que cuando las cosas se pongan difíciles, podamos seguir hablando.
+
+Quiero que podamos entendernos.
+
+Quiero que podamos aprender el uno del otro.
+
+Quiero seguir conociéndote incluso después de mucho tiempo.
+
+Quiero seguir teniendo conversaciones contigo que se alarguen más de lo que planeábamos.
+
+Quiero seguir riéndome contigo por cosas que probablemente nadie más entendería.
+
+Quiero seguir creando recuerdos contigo.
+
+Y quiero que, cuando pasen los años, podamos mirar atrás y decir: "Mira todo lo que vivimos juntos".
+
+Eso es lo que realmente quiero.
+
+No necesito una historia perfecta.
+
+Quiero una historia nuestra.
+
+Con días increíbles, días normales, días difíciles, risas, discusiones, abrazos, conversaciones largas, tonterías y todos esos pequeños momentos que terminan significando más de lo que uno esperaba.
+
+Porque al final, eso es lo que siento cuando pienso en ti.
+
+No pienso solamente en una persona que amo.
+
+Pienso en alguien que quiero tener cerca durante mucho tiempo.
+
+Alguien que quiero cuidar.
+
+Alguien a quien quiero ver feliz.
+
+Alguien por quien quiero seguir mejorando.
+
+Y sobre todo, alguien a quien quiero poder decirle dentro de muchísimo tiempo:
+
+"¿Te acuerdas de cuando empezamos todo esto?"
+
+Y seguir sintiendo exactamente las mismas ganas de quedarme.
+
+Te amo, Tani.
+
+Y probablemente voy a seguir diciéndotelo demasiadas veces.
+
+Voy a seguir siendo intenso, voy a seguir teniendo ataques de cariño, voy a seguir queriendo decirte cosas bonitas de la nada y probablemente voy a seguir escribiéndote mensajes enormes cuando me dé uno de esos momentos en los que siento que mi corazón no se puede quedar callado jajaja.
+
+Pero espero que nunca dudes de que todo eso viene de un lugar muy sincero.
+
+Te quiero porque eres tú.
+
+Te elijo porque contigo puedo ser yo.
+
+Y quiero seguir estando a tu lado porque, entre todas las cosas bonitas que me ha dado la vida, conocerte es definitivamente una de las que más agradezco.
+
+Así que sí, cariño...
+
+Si alguna vez te preguntas cuánto te quiero, probablemente mi respuesta siempre será la misma:
+
+Muchísimo.
+
+Más de lo que sé explicar.
+
+Más de lo que sé demostrar.
+
+Y probablemente más de lo que cualquier mensaje como este pueda decir.
+
+Te amo, mi Tani.
+
+Y espero poder seguir haciéndote sonreír durante muchísimo, muchísimo tiempo.
+
+Mwwaaaa. ❤️
+
+Con amor,
+Tu guapo novio`;
+
+
+// ===== NIVEL 2 =====
+// La carta que recibe al final del nivel 2 (edítala a tu gusto, mismo formato que la anterior).
+const CARTA2_TITULO = "Para mi Tani";
+const CARTA2 = `Tani, si llegaste hasta aquí es porque otra vez lograste algo que parecía más difícil de lo que era.
+
+Y la verdad no me sorprende, nuestra relacion en momentos sera dificil y habra dias que no podamos con mas, pero siempre que estemos junto lograremos llegar muy lejos.
+
+Amor!!!
+
+Quiero que sepas que esto que te digo viene desde lo más profundo de mi corazón.
+
+Aunque a veces dudes de ti misma y pienses que no haces suficiente, para mí siempre eres perfecta tal como eres.
+
+Sin siquiera intentarlo, logras hacerme sentir bien. Me haces sentir en casa y me llenas de alegría solo con ser tú.
+
+Tu forma de ser, tu forma de pensar y esa manera tan hermosa que tienes de ver el mundo son las cosas que más amo de ti, porque me inspiran, me hacen crecer y me recuerdan lo afortunado que soy de tenerte en mi vida.
+
+Gracias por tu paciencia, por tus risas, por esos mensajes que me cambian el día y por hacerme sentir que contigo todo se vuelve más ligero.
+
+Gracias por estar, incluso en los días en los que no es tan fácil.
+
+Me encanta lo que estamos construyendo, poquito a poquito, sin prisa y sin presiones. Cada día contigo suma, y estoy muy feliz de que seas tú con quien lo comparto.
+
+Porque no te elijo solo por los días fáciles o por los momentos bonitos.
+
+Te elijo por quien eres en cada uno de tus días, con tus luces y también con tus sombras, porque todo en ti me encanta y me hace sentir que estoy exactamente donde quiero estar.
+
+Y por eso, una y otra vez, te elijo a ti.
+
+Te elijo cuando todo va bien.
+Te elijo cuando las cosas se ponen difíciles.
+Te elijo cuando te sientas insegura.
+Y te elijo cada mañana al despertar.
+
+Porque no hay nadie más con quien yo prefiera estar.
+
+Eres mi persona favorita en todo el mundo y te seguiré eligiendo hoy, mañana y siempre.
+
+Porque tú eres mi elección más bonita y la más segura que mi corazón jamás ha hecho. 💞💕
+
+Ojalá este nivel te haya sacado una sonrisa, porque ese era el plan desde el principio.
+
+Y si alguna vez sientes que el camino se pone difícil, recuerda que no lo recorres sola. Yo voy contigo, como ese ángel que no se cansa de levantarte.
+
+Te quiero muchísimo, mi Tani.
+
+Con amor,
+Tu guapo novio`;
+
+// Frases del ángel al revivirla (sale una al azar cada vez).
+const FRASES_ANGEL = ["No te rindas", "Confío en ti", "Tú puedes"];
+// Lo que dice el hombre del final antes de entregar la carta.
+const DIALOGO_FINAL = "Lo lograste, mi amor, lo hiciste de maravilla";
+// Música de fondo: archivo de audio junto a este index.html (mp3, ogg o wav).
+// Si no existe, el juego usa su música ambiental generada. Ponlo en "" para desactivar el archivo.
+const MUSICA_ARCHIVO = "musica.mp3";
+
+/* ===================================================================== */
+
+/* ---------- Sonido: todo se genera con Web Audio (sin archivos) ---------- */
+function elegirCancion() {   // tecla C: elegir la canción desde el computador
+  const inp = document.createElement("input"); inp.type = "file"; inp.accept = "audio/*";
+  inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) Snd.usar(URL.createObjectURL(f)); };
+  inp.click();
+}
+const Snd = (() => {
+  let a = null, out, rev, mus, nbuf, drone = null, muted = false, ci = 0, el = null, ext = false, fadeT = null, estado = "";
+  function init() {
+    if (a) { if (a.state === "suspended") a.resume(); if (estado === "bloqueado") cargarMusica(); return; }
+    const AC = typeof window !== "undefined" && (window.AudioContext || window.webkitAudioContext);
+    if (!AC) return;
+    a = new AC(); out = a.createGain(); out.gain.value = 0.7; out.connect(a.destination);
+    rev = a.createConvolver(); const n = a.sampleRate * 2, ib = a.createBuffer(2, n, a.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = ib.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.6); }
+    rev.buffer = ib; const rg = a.createGain(); rg.gain.value = 0.45; rev.connect(rg); rg.connect(out);
+    nbuf = a.createBuffer(1, a.sampleRate, a.sampleRate); const nd = nbuf.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    mus = a.createGain(); mus.gain.value = 0.0001; mus.connect(out); mus.connect(rev);
+    mus.gain.linearRampToValueAtTime(1, a.currentTime + 3);
+    pad(); setInterval(pad, 6000); setInterval(twinkle, 1700);
+    cargarMusica();
+  }
+  function cargarMusica(i = 0) {   // prueba el archivo configurado y variantes comunes (m4a, ogg, wav, "musica.mp3.mp3")
+    if (typeof Audio === "undefined" || !MUSICA_ARCHIVO) return;
+    const lista = [MUSICA_ARCHIVO, "musica.mp3", "musica.m4a", "musica.ogg", "musica.wav", "musica.mp3.mp3"].filter((v, k, ar) => ar.indexOf(v) === k);
+    if (i >= lista.length) { estado = "falta"; return; }
+    const e = new Audio(lista[i]); e.loop = true; e.volume = 0; e.muted = muted;
+    e.play().then(() => {
+      el = e; ext = true; estado = "ok";
+      mus.gain.cancelScheduledValues(a.currentTime); mus.gain.setTargetAtTime(0.0001, a.currentTime, 0.5); fade(0.55, 3);
+    }).catch(err => { if (err && err.name === "NotAllowedError") estado = "bloqueado"; else cargarMusica(i + 1); });
+  }
+  function fade(v, sec) {
+    if (!el) return; clearInterval(fadeT);
+    const v0 = el.volume, n = Math.max(1, sec * 20); let i = 0;
+    fadeT = setInterval(() => { i++; el.volume = Math.max(0, Math.min(1, v0 + (v - v0) * i / n)); if (i >= n) clearInterval(fadeT); }, 50);
+  }
+  function tone(f, d, type = "sine", v = 0.2, to = 0, t0 = 0, rv = 0, dest) {
+    if (!a) return; const t = a.currentTime + t0, o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + d);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + Math.min(0.02, d / 4)); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(dest || out);
+    if (rv) { const s = a.createGain(); s.gain.value = rv; g.connect(s); s.connect(rev); }
+    o.start(t); o.stop(t + d + 0.05);
+  }
+  function noise(d, v, f = 1000, type = "lowpass", t0 = 0, q = 1, to = 0) {
+    if (!a) return; const t = a.currentTime + t0, s = a.createBufferSource(), fl = a.createBiquadFilter(), g = a.createGain();
+    s.buffer = nbuf; s.loop = true; fl.type = type; fl.frequency.setValueAtTime(f, t);
+    if (to) fl.frequency.exponentialRampToValueAtTime(to, t + d); fl.Q.value = q;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + Math.min(0.03, d / 3)); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    s.connect(fl); fl.connect(g); g.connect(out); s.start(t); s.stop(t + d + 0.05);
+  }
+  const CH = [[110, 165, 220, 261.6], [87.3, 130.8, 174.6, 220], [130.8, 196, 261.6, 329.6], [98, 146.8, 196, 247]]; // Am F C G
+  function pad() {   // música ambiental: acordes suaves
+    if (!a) return; const t = a.currentTime;
+    CH[ci++ % 4].forEach((f, i) => {
+      const o = a.createOscillator(), g = a.createGain(); o.type = i ? "triangle" : "sine"; o.frequency.value = f; o.detune.value = (i - 1.5) * 4;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.05, t + 2); g.gain.linearRampToValueAtTime(0.0001, t + 6.5);
+      o.connect(g); g.connect(mus); o.start(t); o.stop(t + 7);
+    });
+  }
+  function twinkle() {
+    if (!a || Math.random() < 0.35) return;
+    const sc = [440, 523.3, 587.3, 659.3, 784, 880, 1046.5];
+    tone(sc[Math.floor(Math.random() * sc.length)], 1.6, "sine", 0.035, 0, 0, 0.8, mus);
+  }
+  const arp = (fs, d, v, gap, rv) => fs.forEach((f, i) => tone(f, d, "sine", v, 0, i * gap, rv));
+  return {
+    init, muted: () => muted, estado: () => estado,
+    usar(url) {   // reproduce un archivo elegido a mano (tecla C)
+      if (!a) return;
+      const e = new Audio(url); e.loop = true; e.volume = 0; e.muted = muted;
+      e.play().then(() => {
+        if (el && el !== e) el.pause();
+        el = e; ext = true; estado = "ok";
+        mus.gain.cancelScheduledValues(a.currentTime); mus.gain.setTargetAtTime(0.0001, a.currentTime, 0.5); fade(0.55, 3);
+      }).catch(() => {});
+    },
+    toggle() { muted = !muted; if (a) out.gain.value = muted ? 0 : 0.7; if (el) el.muted = muted; },
+    music(v, sec) { if (ext) fade(0.55 * v, sec); else if (a) mus.gain.linearRampToValueAtTime(v, a.currentTime + sec); },
+    start() { arp([523, 784], 0.5, 0.1, 0.1, 0.5); },
+    jump() { tone(300, 0.16, "triangle", 0.14, 560); noise(0.08, 0.04, 1800, "highpass"); },
+    land() { noise(0.09, 0.12, 500); tone(130, 0.12, "sine", 0.22, 60); },
+    step() { noise(0.05, 0.05, 700 + Math.random() * 500, "bandpass", 0, 2); },
+    bounce() { tone(180, 0.4, "triangle", 0.22, 900); tone(360, 0.3, "sine", 0.1, 1300, 0.03, 0.3); },
+    crumb() { noise(0.25, 0.1, 600); tone(70, 0.25, "sawtooth", 0.05, 50); },
+    fall() { noise(0.5, 0.18, 400, "lowpass", 0, 1, 100); tone(80, 0.5, "sawtooth", 0.08, 35); },
+    check() { arp([659, 880, 1319], 0.6, 0.12, 0.1, 0.6); },
+    death() { tone(520, 0.9, "sawtooth", 0.12, 60); tone(260, 1.1, "sine", 0.2, 40, 0.05); noise(0.4, 0.08, 300); },
+    ready() { tone(880, 0.3, "sine", 0.1, 0, 0, 0.6); tone(1320, 0.4, "sine", 0.08, 0, 0.12, 0.6); },
+    revive() { arp([392, 523, 659, 784, 1047, 1319], 0.9, 0.1, 0.11, 0.8); noise(0.9, 0.05, 3000, "highpass"); },
+    wing() { noise(0.3, 0.05, 1800, "bandpass", 0, 0.8, 500); },
+    blip(k) { if (k === "a") tone(720 + Math.random() * 180, 0.07, "sine", 0.07, 0, 0, 0.3); else tone(140 + Math.random() * 50, 0.07, "triangle", 0.12); },
+    transform() { tone(180, 0.9, "sawtooth", 0.06, 1800); noise(0.9, 0.08, 300, "bandpass", 0, 1, 4000); arp([523, 659, 784, 1047], 1.2, 0.1, 0.07, 0.8); },
+    chime() { arp([523, 659, 784, 1047], 1.2, 0.1, 0.07, 0.8); },
+    paper() { noise(0.3, 0.09, 3500, "bandpass", 0, 1.5); noise(0.2, 0.06, 2500, "bandpass", 0.12, 1.5); },
+    sparkle() { tone(1500 + Math.random() * 1000, 0.25, "sine", 0.05, 0, 0, 0.7); },
+    portalOpen() {
+      if (!a) return; const t = a.currentTime; drone = { g: a.createGain(), os: [] };
+      const fl = a.createBiquadFilter(); fl.type = "lowpass"; fl.frequency.setValueAtTime(260, t); fl.frequency.linearRampToValueAtTime(900, t + 4);
+      drone.g.gain.setValueAtTime(0.0001, t); drone.g.gain.linearRampToValueAtTime(0.11, t + 3);
+      [55, 82.4, 110.3].forEach(f => { const o = a.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.connect(fl); o.start(t); drone.os.push(o); });
+      fl.connect(drone.g); drone.g.connect(out);
+      tone(150, 2.4, "sawtooth", 0.05, 900); noise(2.4, 0.06, 200, "lowpass", 0, 1, 2500);
+    },
+    portalEnter() { noise(1.2, 0.12, 500, "bandpass", 0, 2, 5000); tone(200, 1.2, "sawtooth", 0.07, 1600); },
+    portalStop() {
+      if (!drone || !a) { drone = null; return; } const t = a.currentTime;
+      drone.g.gain.cancelScheduledValues(t); drone.g.gain.setValueAtTime(Math.max(0.0001, drone.g.gain.value), t);
+      drone.g.gain.linearRampToValueAtTime(0.0001, t + 2); drone.os.forEach(o => o.stop(t + 2.1)); drone = null;
+    },
+    finale() { arp([523, 659, 784, 1047, 1319], 2.4, 0.09, 0.18, 0.9); }
+  };
+})();
+
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+const W = 960, H = 540, GROUND = 470;
+let LEVEL_W = 12000;
+
+/* ---------- Temas visuales ---------- */
+const TEMA1 = { cielo: ["#1c1236", "#6b2f5c", "#e08a7a"], estrellas: true, colinas: ["#4a2250", "#33183f"],
+  suelo: "#24122e", top: "#c95f79", dot: "#f0a0a8", nube: false,
+  portal: { glow: "255,140,200", stops: ["#fff", "#ffb3d1", "#7b3fbf", "#1d0a36"], rings: ["#ff8fb1", "#b388ff", "#ffd98a"] },
+  tunel: { bg: "#0b0414", hue: 310, c1: "255,150,200", c2: "120,60,200", glow: "#ff8fb1" } };
+const TEMA2 = { cielo: ["#4a6bd0", "#b99be0", "#ffd6b4"], estrellas: false, colinas: ["#8d9ae0", "#6e7bc6"],
+  suelo: "#3e3f86", top: "#6fd3b5", dot: "#d2fff1", nube: true,
+  portal: { glow: "120,240,230", stops: ["#fff", "#a8fff0", "#2f8fd0", "#06243f"], rings: ["#7ff5e0", "#8fb8ff", "#ffe08a"] },
+  tunel: { bg: "#04121c", hue: 165, c1: "120,240,230", c2: "60,120,220", glow: "#8ff0e0" } };
+
+/* ---------- Datos de cada nivel ----------
+   Plataformas [x, y, ancho, tipo]  ·  tipo 'c' = se desmorona al pisarla
+   Móviles: ox/oy = centro, rx/ry = recorrido, sp = velocidad (w opcional = ancho)
+   Trampolines: te lanzan muy alto al pisarlos  ·  cps: puntos de control (x)  ·  corazones: coleccionables */
+const NIVELES = [
+  { nombre: "Nivel 1", sub: "Noche de eclipse", w: 12000, npcX: 11600, tema: TEMA1,
+    carta: CARTA, cartaTitulo: CARTA_TITULO, cps: [1850, 5850, 8740], corazones: [],
+    plat: [
+  // Tramo 1: escalera de islas
+  [0,470,700],[830,430,110],[1030,380,100],[1220,330,90],[1400,390,100],[1580,450,110],[1790,470,300],
+  // Tramo 2: móvil, piedras que se desmoronan y torre móvil
+  [2600,440,80,'c'],[2760,420,80,'c'],[2920,440,80,'c'],[3080,400,80,'c'],[3260,440,140],
+  [3700,260,110],[3880,340,100],[4050,420,110],
+  // Tramo 3: trampolín, ruta alta y punto de control
+  [4270,470,260],[4640,280,110],[4830,260,90],[5000,300,90],[5170,250,80],[5340,400,100],[5500,470,110],[5720,470,500],
+  // Tramo 4: ascenso de precisión, móvil larga y piedras frágiles
+  [6330,430,80],[6490,380,70],[6640,330,60],[6790,280,60],[6950,230,70],[7120,290,80],[7290,350,80],[7450,410,90],
+  [8130,420,80,'c'],[8270,400,70,'c'],[8410,420,70,'c'],[8550,400,70,'c'],[8700,470,300],
+  // Tramo 5: ruta alta, móviles opuestas e islas estrechas
+  [9080,280,100],[9260,240,80],[9440,280,80],[10040,400,110],[10230,360,70],[10390,320,60],[10550,360,60],[10710,420,70],
+  [10880,470,1120]
+    ],
+    mov: [
+  { ox:2330, oy:470, rx:100, ry:0,   sp:.020 }, { ox:3520, oy:330, rx:0, ry:90,  sp:.016 },
+  { ox:7800, oy:440, rx:150, ry:0,   sp:.017 }, { ox:9620, oy:300, rx:0, ry:100, sp:.015 },
+  { ox:9830, oy:340, rx:0,   ry:-100, sp:.015 }
+    ],
+    pads: [{ x: 4460, y: 470, w: 50 }, { x: 8900, y: 470, w: 50 }] },
+
+  { nombre: "Nivel 2", sub: "Amanecer entre nubes", w: 8000, npcX: 7600, tema: TEMA2,
+    carta: CARTA2, cartaTitulo: CARTA2_TITULO, cps: [1760, 4300, 5880, 6990],
+    corazones: [[880,380],[1100,360],[1320,340],[1540,360],[2250,380],[2900,360],[3090,320],[3280,280],[3470,240],[3900,330],
+                [4850,230],[5060,240],[5260,270],[5460,320],[6490,390],[6650,370],[7050,400]],
+    plat: [
+      // Tramo 1: escalera suave de nubes
+      [0,470,700],[820,450,140],[1040,430,140],[1260,410,140],[1480,430,160],[1710,470,360],
+      // Tramo 2: nube viajera y ascenso tranquilo
+      [2470,470,260],[2850,430,120],[3040,390,120],[3230,350,120],[3420,310,130],
+      [3650,350,120],[3850,400,150],[4050,450,170],
+      // Tramo 3: trampolín hacia el cielo
+      [4260,470,500],[4790,300,130],[5000,300,120],[5200,330,120],[5400,380,150],[5620,430,150],[5840,470,500],
+      // Tramo 4: nubes que se deshacen (fáciles) y recta final
+      [6440,450,100,'c'],[6600,430,100,'c'],[6760,450,100,'c'],[6930,470,1070]
+    ],
+    mov: [ { ox: 2260, oy: 470, rx: 70, ry: 0, sp: .018, w: 140 } ],
+    pads: [{ x: 4650, y: 470, w: 50 }] }
+];
+
+let PLAT = [], MOV = [], PADS = [], ALL = [], NPC = { x: 0, y: 0 }, CPS = [], PORTAL = { x: 0 }, HEARTS = [];
+let lvl = 0, sel = 0, TEMA = TEMA1, cartaActual = CARTA, cartaTituloAct = CARTA_TITULO, gotH = 0;
+function cargarNivel(i) {
+  const N = NIVELES[i]; lvl = i; TEMA = N.tema; LEVEL_W = N.w;
+  PLAT = N.plat.map(([x, y, w, ty]) => { const fl = y < 460 && w < 200;
+    return { x, y, w, fl, h: fl ? 26 : H - y, crumb: ty === 'c', cr: -1, gone: false, rt: 0 }; });
+  MOV = N.mov.map(m => ({ x: m.ox, y: m.oy, w: 80, h: 14, dx: 0, dy: 0, ph: 0, mov: true, ...m }));
+  PADS = N.pads.map(d => ({ ...d, bt: 0 }));
+  ALL = PLAT.concat(MOV);
+  NPC = { x: N.npcX, y: GROUND - 62 };   // hombre del final (aquí aparece el ángel y se transforma)
+  CPS = N.cps.map(x => ({ x, on: false }));
+  PORTAL = { x: NPC.x + 14 };
+  HEARTS = N.corazones.map(([x, y]) => ({ x, y, got: false })); gotH = 0;
+  cartaActual = N.carta; cartaTituloAct = N.cartaTitulo; cartaL = null;
+}
+
+const keys = {};
+addEventListener("keydown", e => {
+  Snd.init(); if (e.code === "KeyM") Snd.toggle();
+  if (e.code === "KeyC" && state === "title") elegirCancion();
+  keys[e.code] = true;
+  if (state === "levels") {
+    if (e.code === "ArrowLeft" || e.code === "KeyA") { sel = (sel + NIVELES.length - 1) % NIVELES.length; Snd.blip("a"); }
+    if (e.code === "ArrowRight" || e.code === "KeyD") { sel = (sel + 1) % NIVELES.length; Snd.blip("a"); }
+    if (e.code === "Escape" || e.code === "Backspace") state = "title";
+  } else if (e.code === "Escape" && state !== "title") irMenu();
+  if (["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code)) e.preventDefault();
+  if (e.code === "Enter" || e.code === "Space") continuarDialogo();
+  if (e.code === "Enter") {
+    if (state === "title") irNiveles();
+    else if (state === "levels") start(sel);
+    else if (state === "end" && letterT > 120 && letterDone) portalStart();
+    else if (state === "portal" && swal >= 420) irMenu();
+    else if (state === "dead" && deadT >= DEAD_T) revive();
+  }
+});
+addEventListener("keyup", e => keys[e.code] = false);
+addEventListener("wheel", e => { if (state === "end") letterY += e.deltaY * 0.8; }, { passive: true });
+cv.addEventListener("pointerdown", e => { letterDrag = e.clientY; });
+cv.addEventListener("pointermove", e => { if (letterDrag !== null && state === "end") { letterY -= (e.clientY - letterDrag) * (H / cv.clientHeight); letterDrag = e.clientY; } });
+addEventListener("pointerup", () => { letterDrag = null; });
+cv.addEventListener("pointermove", e => { if (state === "levels") { const k = menuHit(e); if (k >= 0) sel = k; } });
+cv.addEventListener("pointerdown", e => { Snd.init(); continuarDialogo(); if (state === "levels") menuClick(e); else if (state === "title") irNiveles(); else if (state === "end" && letterT > 120 && letterDone) portalStart(); else if (state === "portal" && swal >= 420) irMenu(); else if (state === "dead" && deadT >= DEAD_T) revive(); });
+
+let state = "title", cam = 0, t = 0, letterT = 0;
+let musMsgT = 600, pT = 0, swal = -1, ps = 1, spin = 0, flashV = 0, openP = 0, autoWalk = false, dlgT = 0, stepT = 0;
+let fT = 0, npcA = 0, fraseAngel = "", lastF = -1;
+let p, msg, shown, safe, spawn, cpOn, ang = null, deadT = 0, rvT = 0, cpToast = 0;
+// Puntos de control (además del inicio): cada uno se activa al pasar por ahí
+const FIN_TEXTO = "Hasta nuestro próximo mes";
+const DEAD_T = 300;          // espera antes de poder revivir (300 = 5 s)
+
+function irNiveles() { state = "levels"; sel = lvl; cam = 0; Snd.start(); }
+function irMenu() {   // vuelve al selector de niveles
+  state = "levels"; sel = lvl; cam = 0; ang = null; msg = null; autoWalk = false; swal = -1; ps = 1; spin = 0; openP = 0; flashV = 0;
+  Snd.portalStop(); Snd.music(1, 1);
+}
+function start(i = lvl) {
+  cargarNivel(i);
+  p = { x: 60, y: 400, w: 28, h: 62, vx: 0, vy: 0, ground: false, dir: 1, on: null, hair: { x: 0, y: 0, vx: 0, vy: 0 } };
+  safe = { x: 60, y: 400 }; spawn = { x: 60, y: GROUND - 62 }; CPS.forEach(c => c.on = false); deadT = 0; cpToast = 0; ang = null; msg = null; shown = 0; fT = 0; npcA = 0; letterT = 0; dlgT = 0; pT = 0; swal = -1; ps = 1; spin = 0; flashV = 0; openP = 0; autoWalk = false;
+  Snd.portalStop(); Snd.music(1, 1.5); Snd.start(); musMsgT = 600;
+  PLAT.forEach(q => { q.gone = false; q.cr = -1; q.rt = 0; });
+  MENSAJES.forEach(m => m.done = false);
+  HEARTS.forEach(h => h.got = false); gotH = 0;
+  state = "play";
+}
+
+function update() {
+  t++;
+  if (state === "title" || state === "levels") return;
+  if (state === "end") { letterT++; letterY += ((keys.ArrowDown || keys.KeyS ? 1 : 0) - (keys.ArrowUp || keys.KeyW ? 1 : 0)) * 6; return; }
+  if (state === "dead") { if (++deadT === DEAD_T) Snd.ready(); return; }
+  if (state === "revive") { reviveStep(); return; }
+  const inp = state === "play";
+  const L = inp && (keys.ArrowLeft || keys.KeyA), R = (inp && (keys.ArrowRight || keys.KeyD)) || autoWalk;
+  const J = inp && (keys.Space || keys.ArrowUp || keys.KeyW);
+  p.vx = (R ? 3 : 0) - (L ? 3 : 0);
+  if (p.vx) p.dir = Math.sign(p.vx);
+  for (const q of PLAT) if (q.crumb) {                          // piedras que se desmoronan y reaparecen
+    if (q.gone) { if (++q.rt > 260) { q.gone = false; q.cr = -1; } }
+    else if (q.cr >= 0 && ++q.cr > 40) { q.gone = true; q.rt = 0; if (Math.abs(q.x - p.x) < 700) Snd.fall(); }
+  }
+  for (const m of MOV) {
+    const k = Math.sin(t * m.sp), nx = m.ox + k * m.rx, ny = m.oy + k * m.ry;
+    m.dx = nx - m.x; m.dy = ny - m.y; m.x = nx; m.y = ny;
+  }
+  if (p.on) { p.x += p.on.dx; p.y += p.on.dy; }
+  const wasG = p.ground;
+  if (J && p.ground) { p.vy = -8.5; p.ground = false; Snd.jump(); }
+  p.vy = Math.min(p.vy + (p.vy < 0 ? 0.28 : 0.2), 4.5);
+  const pv = p.vy;
+
+  p.x = Math.max(0, Math.min(LEVEL_W - p.w, p.x + p.vx));
+  if (p.vx) for (const s of ALL) if (!s.gone && hit(p, s)) { p.x = p.vx > 0 ? s.x - p.w : s.x + s.w; }
+  p.y += p.vy; p.ground = false; p.on = null;
+  for (const s of ALL) if (!s.gone && hit(p, s)) {
+    if (p.vy > 0) { p.y = s.y - p.h; p.ground = true; if (s.mov) p.on = s; if (s.crumb && s.cr < 0) { s.cr = 0; Snd.crumb(); } } else p.y = s.y + s.h;
+    p.vy = 0;
+  }
+  for (const d of PADS) {
+    if (d.bt > 0) d.bt--;
+    if (p.vy >= 0 && p.x + p.w > d.x && p.x < d.x + d.w && p.y + p.h >= d.y - 2 && p.y + p.h <= d.y + 6) {
+      p.vy = -11.5; p.ground = false; p.on = null; d.bt = 14; Snd.bounce();
+    }
+  }
+  if (!wasG && p.ground && pv > 2.2) Snd.land();
+  if (p.ground && p.vx && ++stepT % 17 === 0) Snd.step();
+  hairStep();
+  for (const h of HEARTS) if (!h.got && Math.abs(p.x + 14 - h.x) < 26 && Math.abs(p.y + 31 - h.y) < 38) { h.got = true; gotH++; Snd.sparkle(); }
+  for (const c of CPS) if (!c.on && p.ground && p.x > c.x - 60) { c.on = true; spawn = { x: c.x, y: GROUND - 62 }; cpToast = 200; Snd.check(); }
+  if (cpToast > 0) cpToast--;
+  if (p.y > H + 60) { state = "dead"; deadT = 0; msg = null; Snd.death(); return; }
+
+  for (const m of MENSAJES) if (!m.done && p.x > m.x) {
+    m.done = true; shown++; msg = { texto: m.texto, t: 0, n: shown };
+  }
+  if (msg && ++msg.t > 480) msg = null;
+
+  if (state === "play" && p.ground && p.x > NPC.x - 240) { state = "final"; fT = 0; p.vx = 0; }
+  if (state === "final") finalStep();
+  if (state === "portal") portalStep();
+  if (state === "final" || state === "portal") cam += (LEVEL_W - W - cam) * 0.04;
+  else cam = Math.max(0, Math.min(LEVEL_W - W, p.x - W / 2 + 13));
+}
+function hairStep() {   // resorte: el cabello se queda atrás al moverse y sube al caer
+  const hr = p.hair, hx = Math.max(-8, Math.min(8, -p.vx * p.dir * 2.6 + Math.sin(t / 25))),
+        hy = Math.max(-6, Math.min(6, -p.vy * 2.4));
+  hr.vx = (hr.vx + (hx - hr.x) * 0.14) * 0.8; hr.vy = (hr.vy + (hy - hr.y) * 0.14) * 0.8;
+  hr.x += hr.vx; hr.y += hr.vy;
+}
+function revive() {
+  cam = Math.max(0, Math.min(LEVEL_W - W, spawn.x - W / 2 + 14));
+  p.x = spawn.x; p.y = H + 140; p.vx = p.vy = 0; p.ground = false; p.on = null; p.dir = 1;
+  Object.assign(p.hair, { x: 0, y: 0, vx: 0, vy: 0 });
+  let n; do { n = Math.floor(Math.random() * FRASES_ANGEL.length); } while (n === lastF && FRASES_ANGEL.length > 1);
+  lastF = n; fraseAngel = FRASES_ANGEL[n];
+  rvT = 0; state = "revive"; Snd.revive();
+}
+function reviveStep() {   // 0-120: el ángel la sube del abismo · 120-190: la deja y se desvanece
+  rvT++; p.x = spawn.x; p.vx = 0;
+  if (rvT < 170 && rvT % 31 === 5) Snd.wing();
+  if (rvT === 120) Snd.land();
+  if (rvT > 40 && (rvT - 40) % 3 === 0) { const n = (rvT - 40) / 3; if (n <= fraseAngel.length && fraseAngel[n - 1] !== " ") Snd.blip("a"); }
+  if (rvT < 120) {
+    const k = rvT / 120, e = 1 - Math.pow(1 - k, 3);
+    p.y = (H + 140) + (spawn.y - (H + 140)) * e; p.vy = -2.5 * (1 - k) - 0.2; p.ground = false;
+    ang = { y: p.y, a: Math.min(1, rvT / 20), hold: true };
+  } else {
+    const k = (rvT - 120) / 70;
+    p.y = spawn.y; p.vy = 0; p.ground = true;
+    ang = { y: spawn.y - k * k * 260, a: Math.max(0, 1 - k), hold: rvT < 128 };
+  }
+  hairStep();
+  if (rvT >= 190) { state = "play"; ang = null; p.y = spawn.y; p.vy = 0; p.ground = true; }
+}
+function continuarDialogo() {   // 1ª pulsación: completa el texto · 2ª: continúa
+  if (state !== "final" || fT < 300 || fT >= 400) return;
+  if (dlgT < DIALOGO_FINAL.length * 3) dlgT = DIALOGO_FINAL.length * 3; else fT = 400;
+}
+function finalStep() {   // 0-130 baja · 130-200 pliega alas · 200-250 se transforma · 250-415 habla · 415-520 entrega
+  fT++;
+  if (fT >= 300 && fT < 400) fT = 300;   // pausa: espera a que se cierre el diálogo
+  if (fT < 210 && fT % 31 === 5) Snd.wing();
+  if (fT === 190) Snd.transform();
+  if (fT >= 255 && fT < 400) { dlgT++; if (dlgT % 3 === 0) { const n = dlgT / 3; if (n <= DIALOGO_FINAL.length && DIALOGO_FINAL[n - 1] !== " ") Snd.blip("m"); } }
+  if (fT === 415 || (fT > 415 && fT % 9 === 0)) Snd.sparkle();
+  const ease = k => k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2, ax = NPC.x + 14;
+  if (fT < 130) { ang = { x: ax, y: -200 + 586 * ease(fT / 130), a: Math.min(1, fT / 25), s: 1, wf: 0, f: fT }; npcA = 0; }
+  else if (fT < 200) { const k = (fT - 130) / 70, sc = 1 - .25 * k; ang = { x: ax, y: 470 - 84 * sc, a: 1, s: sc, wf: k, f: fT }; }
+  else if (fT < 250) { const k = (fT - 200) / 50; ang = { x: ax, y: 470 - 63, a: 1 - k, s: .75, wf: 1, f: fT }; npcA = k; }
+  else { ang = null; npcA = 1; }
+  if (fT >= 520) { state = "end"; letterT = 0; ang = null; npcA = 1; Snd.paper(); Snd.chime(); }
+}
+function portalStart() { state = "portal"; pT = 0; swal = -1; ps = 1; spin = 0; npcA = 1; ang = null; autoWalk = false; }
+function portalStep() {   // 0-40 él vuelve a ser ángel · 40-190 se eleva · 110-190 se abre el portal · 200+ ella camina y entra
+  pT++; flashV = 0; const ax = NPC.x + 14;
+  if (pT <= 40) {
+    const k = pT / 40; npcA = 1 - k; ang = { x: ax, y: 470 - 63, a: k, s: .75, wf: 1, f: pT };
+    flashV = Math.max(0, 1 - Math.abs(pT - 20) / 18); if (pT === 6) Snd.transform();
+  } else if (pT <= 100) {
+    const k = (pT - 40) / 60, sc = .75 + .25 * k; npcA = 0; ang = { x: ax, y: 470 - 84 * sc, a: 1, s: sc, wf: 1 - k, f: pT };
+  } else if (pT <= 190) {
+    const k = (pT - 100) / 90; ang = { x: ax, y: 386 - k * k * 640, a: 1 - Math.max(0, k - .5) * 2, s: 1, wf: 0, f: pT };
+  } else ang = null;
+  if (pT > 40 && pT < 190 && pT % 31 === 5) Snd.wing();
+  openP = Math.max(0, Math.min(1, (pT - 110) / 80));
+  if (pT === 110) Snd.portalOpen();
+  if (openP > 0 && pT % 16 === 0) Snd.sparkle();
+  if (swal < 0) {
+    autoWalk = pT >= 200 && p.x + 14 < PORTAL.x - 4;
+    if (pT >= 200 && !autoWalk) { swal = 0; Snd.portalEnter(); }
+  }
+  if (swal >= 0) {                       // ella es absorbida por el portal
+    swal++; autoWalk = false; const k = Math.min(1, swal / 60);
+    p.x += (PORTAL.x - 14 - p.x) * 0.12; p.y += (GROUND - 113 - p.y) * 0.08; p.vx = 0; p.vy = 0; p.ground = false;
+    ps = 1 - k * k; spin = k * k * 6;
+    if (swal === 61) Snd.music(0.3, 2);
+    if (swal === 160) Snd.finale();
+    if (swal === 190) Snd.portalStop();
+  }
+}
+const hit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+
+/* ---------- Dibujo ---------- */
+function fondo() {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, TEMA.cielo[0]); g.addColorStop(.6, TEMA.cielo[1]); g.addColorStop(1, TEMA.cielo[2]);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#fff"; 
+  for (let i = 0; i < (TEMA.estrellas ? 60 : 0); i++) {
+    const sx = (i * 173 - cam * 0.05) % W, sy = (i * 71) % 260;
+    ctx.globalAlpha = 0.4 + 0.4 * Math.sin(t / 30 + i);
+    ctx.fillRect((sx + W) % W, sy, 2, 2);
+  }
+  ctx.globalAlpha = 1;
+  if (TEMA.estrellas) eclipse(); else { sol(); nubesFondo(); }
+  colinas(0.15, 380, TEMA.colinas[0], 90); colinas(0.35, 430, TEMA.colinas[1], 70);
+}
+function sol() {
+  const mx = 760, my = 120, r = 50;
+  let g = ctx.createRadialGradient(mx, my, r * .5, mx, my, 220);
+  g.addColorStop(0, "rgba(255,240,190," + (0.55 + 0.05 * Math.sin(t / 50)) + ")"); g.addColorStop(1, "rgba(255,240,190,0)");
+  ctx.fillStyle = g; ctx.fillRect(mx - 230, my - 230, 460, 460);
+  g = ctx.createRadialGradient(mx - 10, my - 10, 4, mx, my, r);
+  g.addColorStop(0, "#fffbe6"); g.addColorStop(1, "#ffd27d");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(mx, my, r, 0, 7); ctx.fill();
+}
+function nubesFondo() {
+  ctx.fillStyle = "rgba(255,255,255,.5)";
+  for (let i = 0; i < 8; i++) {
+    const x = (((i * 290 - cam * 0.12 + t * 0.12) % (W + 360)) + W + 360) % (W + 360) - 180, y = 60 + (i * 57) % 190, s = 0.8 + (i % 3) * 0.3;
+    for (const [dx, dy, r] of [[0, 0, 26], [28, -8, 32], [60, 0, 24], [30, 8, 26]]) { ctx.beginPath(); ctx.arc(x + dx * s, y + dy * s, r * s, 0, 7); ctx.fill(); }
+  }
+}
+function eclipse() {
+  const mx = 760, my = 110, r = 46;
+  let g = ctx.createRadialGradient(mx, my, r * .6, mx, my, 170);
+  g.addColorStop(0, "rgba(210,60,40," + (0.38 + 0.05 * Math.sin(t / 50)) + ")"); g.addColorStop(1, "rgba(210,60,40,0)");
+  ctx.fillStyle = g; ctx.fillRect(mx - 180, my - 180, 360, 360);       // halo rojizo
+  g = ctx.createRadialGradient(mx - 12, my - 12, 4, mx, my, r);
+  g.addColorStop(0, "#b8391f"); g.addColorStop(.6, "#7d1c17"); g.addColorStop(1, "#3f0b10");
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(mx, my, r, 0, 7); ctx.fill(); // luna roja
+  ctx.fillStyle = "rgba(40,5,10,.22)";
+  for (const [cx, cy, cr] of [[-14, -6, 9], [12, 10, 12], [4, -20, 6], [-8, 20, 7]]) {
+    ctx.beginPath(); ctx.arc(mx + cx, my + cy, cr, 0, 7); ctx.fill();
+  }
+  ctx.strokeStyle = "rgba(255,200,150,.6)"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.arc(mx, my, r - 1, Math.PI * 1.08, Math.PI * 1.42); ctx.stroke(); // borde de luz
+}
+function colinas(par, base, col, amp) {
+  ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(0, H);
+  for (let x = 0; x <= W; x += 20) ctx.lineTo(x, base - amp * Math.abs(Math.sin((x + cam * par) / 160)));
+  ctx.lineTo(W, H); ctx.fill();
+}
+function plataformas() {
+  for (const s of ALL) {
+    let x = s.x - cam;
+    if (x > W || x + s.w < 0) continue;
+    if (s.mov) {
+      ctx.fillStyle = "rgba(255,200,120,.25)"; rr(x - 6, s.y - 6, s.w + 12, s.h + 12, 10);
+      ctx.fillStyle = "#e6b450"; rr(x, s.y, s.w, s.h, 6);
+      ctx.fillStyle = "#fff2c8"; ctx.fillRect(x + 8, s.y + 3, s.w - 16, 3);
+      continue;
+    }
+    let top = TEMA.top, dot = TEMA.dot;
+    if (s.crumb) { top = "#d9a066"; dot = "#ffd9a0"; if (s.gone) ctx.globalAlpha = 0.12; else if (s.cr > 0) x += Math.sin(t * 2.2) * 1.6; }
+    ctx.fillStyle = TEMA.suelo;
+    if (s.fl && TEMA.nube) {   // islas en forma de nube
+      ctx.fillStyle = s.crumb ? "#ffd9b0" : "#e6dcff"; rr(x, s.y + 5, s.w, 20, 10);
+      ctx.fillStyle = s.crumb ? "#fff0dc" : "#fff"; rr(x - 3, s.y, s.w + 6, 12, 6);
+      for (const [fx, fr] of [[.3, 10], [.68, 13]]) { ctx.beginPath(); ctx.arc(x + s.w * fx, s.y + 2, fr, 0, 7); ctx.fill(); }
+      top = s.crumb ? "#fff0dc" : "#fff"; dot = "rgba(255,255,255,0)";
+    } else if (s.fl) {
+      ctx.beginPath(); ctx.moveTo(x, s.y); ctx.lineTo(x + s.w, s.y);
+      ctx.lineTo(x + s.w * .7, s.y + s.h + 16); ctx.lineTo(x + s.w * .3, s.y + s.h + 16); ctx.fill();
+    } else if (!(s.fl && TEMA.nube)) ctx.fillRect(x, s.y, s.w, s.h);
+    ctx.fillStyle = top; ctx.fillRect(x, s.y, s.w, 8);
+    if (s.crumb) {
+      ctx.strokeStyle = "#24122e"; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.moveTo(x + s.w * .3, s.y); ctx.lineTo(x + s.w * .38, s.y + 7); ctx.lineTo(x + s.w * .33, s.y + 15);
+      ctx.moveTo(x + s.w * .7, s.y + 2); ctx.lineTo(x + s.w * .62, s.y + 9); ctx.stroke();
+    }
+    ctx.fillStyle = dot;
+    for (let i = 6; i < s.w - 4; i += 22) ctx.fillRect(x + i, s.y - 3, 3, 3);
+    ctx.globalAlpha = 1;
+  }
+  for (const d of PADS) {                                         // trampolines
+    const x = d.x - cam;
+    if (x > W || x + d.w < 0) continue;
+    const c = d.bt > 0 ? 3 : 10;
+    ctx.fillStyle = "#8b8794"; ctx.fillRect(x + d.w / 2 - 3, d.y - c, 6, c);
+    ctx.fillStyle = "#f0a0a8"; rr(x, d.y - c - 6, d.w, 7, 3);
+    ctx.fillStyle = "#c95f79"; ctx.fillRect(x + 5, d.y - c - 3, d.w - 10, 2);
+  }
+}
+function corazones() {
+  for (const h of HEARTS) {
+    if (h.got) continue; const x = h.x - cam, y = h.y + Math.sin(t / 20 + h.x) * 4;
+    if (x < -30 || x > W + 30) continue;
+    const g = ctx.createRadialGradient(x, y, 2, x, y, 24); g.addColorStop(0, "rgba(255,120,150,.55)"); g.addColorStop(1, "rgba(255,120,150,0)");
+    ctx.fillStyle = g; ctx.fillRect(x - 26, y - 26, 52, 52);
+    ctx.fillStyle = "#ff5f86"; ctx.beginPath(); ctx.moveTo(x, y + 9);
+    ctx.bezierCurveTo(x - 16, y - 2, x - 9, y - 14, x, y - 5); ctx.bezierCurveTo(x + 9, y - 14, x + 16, y - 2, x, y + 9); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.6)"; ctx.fillRect(x - 6, y - 7, 3, 3);
+  }
+}
+function marcador() {   // faroles de los puntos de control
+  for (const c of CPS) {
+    const x = c.x + 70 - cam;
+    if (x < -60 || x > W + 60) continue;
+    ctx.fillStyle = "#3a2a44"; ctx.fillRect(x, GROUND - 54, 4, 54);
+    if (c.on) {
+      const g = ctx.createRadialGradient(x + 2, GROUND - 60, 2, x + 2, GROUND - 60, 50);
+      g.addColorStop(0, "rgba(255,220,140,.7)"); g.addColorStop(1, "rgba(255,220,140,0)");
+      ctx.fillStyle = g; ctx.fillRect(x - 50, GROUND - 112, 104, 104);
+    }
+    ctx.fillStyle = c.on ? "#ffd98a" : "#5a4c66"; ctx.beginPath(); ctx.arc(x + 2, GROUND - 60, 7, 0, 7); ctx.fill();
+  }
+}
+function angel(back) {   // silueta blanca masculina con alas; back = cuerpo, si no = brazos
+  if (!ang) return;
+  const cx = (ang.x ?? spawn.x + 14) - cam, py = ang.y, ft = ang.f ?? rvT;
+  ctx.save(); ctx.globalAlpha = ang.a; ctx.fillStyle = "#fff";
+  ctx.translate(cx, py); ctx.scale(ang.s || 1, ang.s || 1); ctx.translate(-cx, -py);
+  if (back) {
+    const g = ctx.createRadialGradient(cx, py + 20, 10, cx, py + 20, 140);
+    g.addColorStop(0, "rgba(255,255,255,.55)"); g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = g; ctx.fillRect(cx - 150, py - 130, 300, 300);
+    ctx.fillStyle = "rgba(255,255,255,.95)";
+    for (let i = 0; i < 14; i++) {                                   // destellos que suben
+      const sy = py + 110 - ((ft * 1.3 + i * 31) % 150);
+      ctx.fillRect(cx + Math.sin(i * 12.9) * 80, sy, 2.5, 2.5);
+    }
+    const fl = Math.sin(ft / 5);
+    for (const sd of [-1, 1]) {                                       // alas
+      ctx.save(); ctx.translate(cx + sd * 10, py + 4); ctx.scale(sd * (1 - 0.85 * (ang.wf || 0)), 1); ctx.rotate(-0.35 - fl * 0.3);
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(30, -50, 80, -50, 96, -14);
+      ctx.bezierCurveTo(84, -14, 80, -2, 70, 2); ctx.bezierCurveTo(68, 10, 56, 12, 48, 14);
+      ctx.bezierCurveTo(40, 24, 20, 20, 0, 14); ctx.fill(); ctx.restore();
+    }
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(cx, py - 14, 9, 0, 7); ctx.fill();   // cabeza
+    rr(cx - 15, py - 4, 30, 46, 10);                                                       // torso
+    const sw = Math.sin(ft / 8) * 3;
+    rr(cx - 11 + sw, py + 36, 9, 48, 4); rr(cx + 2 - sw, py + 36, 9, 48, 4);              // piernas
+  } else if (ang.hold) {                                              // brazos que la sostienen
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 8; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath(); ctx.moveTo(cx - 16, py + 2); ctx.lineTo(cx - 12, py + 24); ctx.lineTo(cx - 3, py + 34);
+    ctx.moveTo(cx + 16, py + 2); ctx.lineTo(cx + 12, py + 24); ctx.lineTo(cx + 3, py + 34); ctx.stroke();
+  }
+  ctx.restore();
+}
+function hombre(a, off) {   // personaje no jugable del final
+  const x = NPC.x - cam + 14, y = NPC.y, br = Math.sin(t / 30) * 0.6;
+  const skin = "#d8a67f", shade = "#bd8763", blk = "#15121a", fold = "#2c2833", boot = "#0b0a0d", hair = "#1b1211", hairL = "#4a3630";
+  if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a;
+  const g = ctx.createRadialGradient(x, y + 30, 6, x, y + 30, 110);          // aura
+  g.addColorStop(0, "rgba(255,225,170," + (0.28 + 0.06 * Math.sin(t / 25)) + ")"); g.addColorStop(1, "rgba(255,225,170,0)");
+  ctx.fillStyle = g; ctx.fillRect(x - 120, y - 90, 240, 240);
+  ctx.fillStyle = "rgba(255,235,190,.8)";
+  for (let i = 0; i < 6; i++) { const an = t / 70 + i * 1.05; ctx.beginPath(); ctx.arc(x + Math.cos(an) * (44 + 4 * Math.sin(t / 20 + i)), y + 32 + Math.sin(an) * 40, 1.6, 0, 7); ctx.fill(); }
+  ctx.translate(x, y); ctx.scale(-1.35, 1.35);
+  for (const px of [-6, 1]) {                                                 // piernas y botas
+    ctx.fillStyle = blk; rr(px, 33, 6.5, 11, 2);
+    ctx.fillStyle = fold; ctx.fillRect(px + 2.5, 34, 1, 8);
+    ctx.fillStyle = boot; rr(px - 1, 41, 9.5, 6, 2);
+    ctx.fillStyle = "#3a3540"; ctx.fillRect(px - 1, 45.5, 9.5, 1.5);
+    ctx.fillStyle = "#6a6572"; ctx.fillRect(px + 3, 42, 2, 1); ctx.fillRect(px + 3, 44, 2, 1);
+  }
+  ctx.fillStyle = blk; rr(-10, 16 + br, 20, 20, 4);                           // chaqueta
+  ctx.fillStyle = "#221f29"; rr(-4.5, 14.5 + br, 9, 6, 2);                    // cuello alto
+  ctx.strokeStyle = "#8b8794"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, 21 + br); ctx.lineTo(0, 35); ctx.stroke();
+  ctx.fillStyle = fold; ctx.fillRect(-9, 17 + br, 5, 2); ctx.fillRect(4, 17 + br, 5, 2);
+  ctx.fillStyle = boot; ctx.fillRect(-10, 34, 20, 3);
+  ctx.fillStyle = "#b9b4c2"; ctx.fillRect(-2, 34, 4, 3);
+  const arm = (side, ang) => {
+    ctx.save(); ctx.translate(side * 10.5, 19 + br); ctx.rotate(ang);
+    ctx.fillStyle = blk; rr(-3.5, 0, 7, 12, 3);
+    ctx.fillStyle = fold; ctx.fillRect(-3.5, 9, 7, 2);
+    ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(0, 13.5, 2.8, 0, 7); ctx.fill();
+    ctx.fillStyle = "#b9b4c2"; ctx.fillRect(-3.5, 8, 7, 1);                   // reloj
+    ctx.restore();
+  };
+  arm(-1, 0.05); arm(1, -1.25 * off);
+  ctx.fillStyle = skin; ctx.fillRect(-2.5, 13, 5, 4);                         // cuello
+  ctx.strokeStyle = "#b9b4c2"; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.arc(0, 14.5, 4.5, 0.2, Math.PI - 0.2); ctx.stroke(); // cadena
+  ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(0, 8, 9, 0, 7); ctx.fill();  // cabeza
+    ctx.fillStyle = hair;                                                       // pelo corto con volumen
+  ctx.beginPath(); ctx.arc(0, 8, 9.8, Math.PI * 0.9, Math.PI * 1.87);         // cubre nuca, lados y coronilla
+  ctx.quadraticCurveTo(5, 0.5, 0, 1.5); ctx.quadraticCurveTo(-5, 2.5, -7.2, 8.5); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-8.8, 1); ctx.quadraticCurveTo(-8, -6, 1, -6.5);   // volumen y copete hacia adelante
+  ctx.quadraticCurveTo(9.5, -7, 11, -0.5); ctx.quadraticCurveTo(7.5, -2.5, 3.5, -1);
+  ctx.quadraticCurveTo(-3, 0.5, -8.5, 1.5); ctx.closePath(); ctx.fill();
+  ctx.fillRect(-7.6, 6, 2.2, 5);                                              // patilla
+  ctx.fillStyle = "rgba(216,166,127,.3)"; ctx.beginPath();                    // degradado (fade) en la nuca
+  ctx.arc(0, 8, 9.8, Math.PI * 0.9, Math.PI * 1.02); ctx.lineTo(-6.6, 7.6); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(-8.2, 10, 1.9, 0, 7); ctx.fill();   // oreja
+  ctx.fillStyle = "#c9c4d2"; ctx.beginPath(); ctx.arc(-8.2, 12, 0.8, 0, 7); ctx.fill(); // arete
+  ctx.strokeStyle = hairL; ctx.lineWidth = 0.8; ctx.beginPath();
+  ctx.moveTo(-4, -3.5); ctx.quadraticCurveTo(0, -6, 6, -3.5); ctx.moveTo(-7, 0); ctx.quadraticCurveTo(-3, -3, 1, -1.5); ctx.stroke();
+  ctx.strokeStyle = hair; ctx.lineWidth = 1.7; ctx.beginPath(); ctx.moveTo(2, 6.2); ctx.lineTo(6.8, 5.6); ctx.stroke(); // ceja
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(4.4, 9, 2.2, 2.4, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#2a1712"; ctx.beginPath(); ctx.arc(4.9, 9.2, 1.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(5.4, 8.6, 0.5, 0, 7); ctx.fill();
+  ctx.strokeStyle = "#1a0d0d"; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(2, 7.4); ctx.lineTo(6.9, 7.4); ctx.stroke();
+  ctx.fillStyle = shade; ctx.fillRect(7.6, 10.5, 1.2, 1.8);                   // nariz
+  ctx.strokeStyle = "#7a3f30"; ctx.lineWidth = 1.2; ctx.beginPath();
+  ctx.moveTo(3.6, 14.4); ctx.quadraticCurveTo(5.4, 15.6, 7, 14.2); ctx.stroke(); // sonrisa leve
+  ctx.restore();
+}
+function sobre() {   // la carta viaja de su mano hacia ella
+  if (fT < 415 || state !== "final") return;
+  const k = Math.min(1, (fT - 415) / 100), e = k * k * (3 - 2 * k);
+  const sx = NPC.x - 6 - cam, sy = NPC.y + 34, ex = p.x + 30 - cam, ey = p.y + 30;
+  const px = sx + (ex - sx) * e, py = sy + (ey - sy) * e - Math.sin(k * Math.PI) * 34;
+  const g = ctx.createRadialGradient(px, py, 2, px, py, 34);
+  g.addColorStop(0, "rgba(255,225,170,.6)"); g.addColorStop(1, "rgba(255,225,170,0)");
+  ctx.fillStyle = g; ctx.fillRect(px - 36, py - 36, 72, 72);
+  ctx.fillStyle = "#fbf1e2"; rr(px - 13, py - 9, 26, 18, 2);
+  ctx.strokeStyle = "#c9b79c"; ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(px - 13, py - 9); ctx.lineTo(px, py + 2); ctx.lineTo(px + 13, py - 9); ctx.stroke();
+  ctx.fillStyle = "#c0091f"; ctx.beginPath(); ctx.arc(px, py + 1, 3, 0, 7); ctx.fill();
+}
+function destello() {
+  const f = state === "final" ? Math.max(0, 1 - Math.abs(fT - 225) / 22) : flashV;
+  if ((state !== "final" && state !== "portal") || f <= 0) return;
+  const x = NPC.x + 14 - cam, y = NPC.y + 30, g = ctx.createRadialGradient(x, y, 5, x, y, 60 + f * 260);
+  g.addColorStop(0, "rgba(255,255,255," + f + ")"); g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+}
+function burbuja(txt, cx, cy, al, n = 999) {   // globo de diálogo; cy = punto al que apunta la colita
+  ctx.save(); ctx.globalAlpha = Math.max(0, al); ctx.font = "italic 19px Georgia, serif";
+  const w = ctx.measureText(txt).width + 34, h = 38, x = Math.max(10, Math.min(W - w - 10, cx - w / 2)), y = Math.max(10, cy - 8 - h);
+  ctx.fillStyle = "rgba(255,250,244,.95)"; rr(x, y, w, h, 14);
+  ctx.beginPath(); ctx.moveTo(cx - 7, y + h - 1); ctx.lineTo(cx, y + h + 9); ctx.lineTo(cx + 7, y + h - 1); ctx.fill();
+  ctx.fillStyle = "#4a2a3a"; ctx.textAlign = "left"; ctx.fillText(txt.slice(0, n), x + 17, y + 25);
+  ctx.restore();
+}
+function dialogos() {
+  if (state === "revive" && ang && rvT > 40 && rvT < 185)
+    burbuja(fraseAngel, spawn.x + 14 - cam, ang.y - 32, Math.min(1, (rvT - 40) / 15, (185 - rvT) / 15) * ang.a, Math.floor((rvT - 40) / 3) + 1);
+  if (state === "final" && fT > 255 && fT < 415)
+    burbuja(DIALOGO_FINAL, NPC.x + 14 - cam, NPC.y - 20, Math.min(1, (fT - 255) / 20, (415 - fT) / 15), Math.floor(dlgT / 3) + 1);
+  if (state === "final" && fT >= 300 && fT < 400 && dlgT >= DIALOGO_FINAL.length * 3) {
+    ctx.save(); ctx.globalAlpha = 0.6 + 0.4 * Math.sin(t / 15); ctx.font = "italic 17px Georgia, serif";
+    ctx.textAlign = "center"; ctx.fillStyle = "#ffe3e6"; ctx.fillText("Presiona Enter para continuar", W / 2, H - 28); ctx.restore();
+  }
+}
+function portal(o) {   // portal giratorio
+  if (o <= 0) return;
+  const e = 1 - Math.pow(1 - o, 3), cx = PORTAL.x - cam, cy = GROUND - 82;
+  ctx.save(); ctx.translate(cx, cy); ctx.scale(e, e);
+  let g = ctx.createRadialGradient(0, 0, 20, 0, 0, 170); g.addColorStop(0, "rgba(" + TEMA.portal.glow + ",.45)"); g.addColorStop(1, "rgba(" + TEMA.portal.glow + ",0)");
+  ctx.fillStyle = g; ctx.fillRect(-180, -180, 360, 360);
+  ctx.save(); ctx.beginPath(); ctx.ellipse(0, 0, 46, 82, 0, 0, 7); ctx.clip();
+  g = ctx.createRadialGradient(0, 0, 2, 0, 0, 84);
+  const PS = TEMA.portal.stops; g.addColorStop(0, PS[0]); g.addColorStop(.25, PS[1]); g.addColorStop(.65, PS[2]); g.addColorStop(1, PS[3]);
+  ctx.fillStyle = g; ctx.fillRect(-50, -90, 100, 180);
+  ctx.strokeStyle = "rgba(255,255,255,.4)"; ctx.lineWidth = 3;
+  for (let k = 0; k < 4; k++) {
+    ctx.beginPath();
+    for (let r = 4; r < 88; r += 3) { const an = k * Math.PI / 2 + r * 0.09 - t * 0.05, x = Math.cos(an) * r * .56, y = Math.sin(an) * r; r === 4 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }
+    ctx.stroke();
+  }
+  ctx.restore();
+  for (const [col, w, ex, sp] of [[TEMA.portal.rings[0], 4, 0, 1], [TEMA.portal.rings[1], 3, 4, -1.3], [TEMA.portal.rings[2], 2, 8, 1.7]]) {
+    ctx.strokeStyle = col; ctx.lineWidth = w; ctx.setLineDash([18, 10]); ctx.lineDashOffset = -t * sp * 1.5;
+    ctx.beginPath(); ctx.ellipse(0, 0, 46 + ex, 82 + ex, 0, 0, 7); ctx.stroke();
+  }
+  ctx.setLineDash([]); ctx.fillStyle = "#fff";
+  for (let i = 0; i < 12; i++) {
+    const an = t / 50 + i * .52, rr2 = 1 + .08 * Math.sin(t / 10 + i);
+    ctx.globalAlpha = .5 + .4 * Math.sin(t / 12 + i); ctx.beginPath(); ctx.arc(Math.cos(an) * 62 * rr2, Math.sin(an) * 98 * rr2, 1.8, 0, 7); ctx.fill();
+  }
+  ctx.restore();
+}
+function tunel(n) {   // viaje por el portal + mensaje final
+  const cx = W / 2, cy = H / 2;
+  const TT = TEMA.tunel; ctx.fillStyle = TT.bg; ctx.fillRect(0, 0, W, H);
+  let g = ctx.createRadialGradient(cx, cy, 10, cx, cy, 420);
+  g.addColorStop(0, "rgba(" + TT.c1 + ",.55)"); g.addColorStop(.4, "rgba(" + TT.c2 + ",.25)"); g.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  for (let i = 0; i < 14; i++) {                       // anillos que avanzan hacia ti
+    const k = (n * 0.012 + i / 14) % 1, r = Math.pow(k, 2.2) * 640;
+    ctx.strokeStyle = "hsla(" + (TT.hue + i * 9) + ",90%,72%," + Math.sin(k * Math.PI) * .75 + ")"; ctx.lineWidth = 1 + k * 7;
+    ctx.beginPath(); ctx.ellipse(cx, cy, r, r * .72, 0, 0, 7); ctx.stroke();
+  }
+  ctx.lineCap = "round";
+  for (let i = 0; i < 44; i++) {                       // estelas de luz
+    const an = i * Math.PI * 2 / 44 + n * 0.002, k = (n * 0.014 + i * 0.37) % 1, r0 = 30 + k * k * 620, r1 = r0 + 14 + k * 90;
+    ctx.strokeStyle = "rgba(255,240,250," + k * .6 + ")"; ctx.lineWidth = 1 + k * 2.2;
+    ctx.beginPath(); ctx.moveTo(cx + Math.cos(an) * r0, cy + Math.sin(an) * r0 * .72); ctx.lineTo(cx + Math.cos(an) * r1, cy + Math.sin(an) * r1 * .72); ctx.stroke();
+  }
+  const a = Math.max(0, Math.min(1, (n - 100) / 50));
+  if (a > 0) {
+    ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = "rgba(11,4,20,.72)"; ctx.beginPath(); ctx.ellipse(cx, cy + 6, 420, 92, 0, 0, 7); ctx.fill();
+    ctx.textAlign = "center"; ctx.shadowColor = TT.glow; ctx.shadowBlur = 28; ctx.fillStyle = "#fff";
+    ctx.font = "italic bold 54px Georgia, serif"; ctx.fillText(FIN_TEXTO, cx, cy + 10 - (1 - a) * 12);
+    ctx.shadowBlur = 0; ctx.fillStyle = "#ffd9e4"; ctx.font = "italic 22px Georgia, serif"; ctx.fillText("♥", cx, cy + 52);
+    if (n > 360) { ctx.globalAlpha = 0.5 + 0.5 * Math.sin(t / 20); ctx.font = "italic 17px Georgia, serif"; ctx.fillText("Presiona Enter para volver al menú", cx, H - 36); }
+    ctx.restore();
+  }
+  if (n < 50) { ctx.fillStyle = "rgba(255,255,255," + (1 - n / 50) + ")"; ctx.fillRect(0, 0, W, H); }
+}
+function muerte() {
+  ctx.globalAlpha = Math.min(1, deadT / 30); ctx.fillStyle = "rgba(35,0,10,.8)"; ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = "center"; ctx.fillStyle = "#ffd9dc";
+  ctx.font = "bold 64px Georgia, serif"; ctx.fillText("Has caído", W / 2, 230);
+  ctx.font = "22px Georgia, serif";
+  if (deadT < DEAD_T) {
+    ctx.fillText("Podrás revivir en " + Math.ceil((DEAD_T - deadT) / 60), W / 2, 285);
+    ctx.strokeStyle = "#ff8a94"; ctx.lineWidth = 4; ctx.beginPath();
+    ctx.arc(W / 2, 350, 26, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * deadT / DEAD_T); ctx.stroke();
+  } else {
+    ctx.globalAlpha = 0.6 + 0.4 * Math.sin(t / 20); ctx.fillText("Presiona Enter para revivir", W / 2, 285);
+  }
+  ctx.globalAlpha = 1;
+}
+function personaje() {
+  const x = p.x - cam, y = p.y, o = p.hair, air = !p.ground;
+  const sw = !air && p.vx ? Math.sin(t / 4.5) * 6 : 0;
+  const hair = "#c0091f", hairD = "#7d0010", hairL = "#e8404e";
+  const skin = "#f8e6dc", shade = "#e8c9bd", blk = "#15121a", fold = "#2c2833", boot = "#0b0a0d";
+  ctx.save(); ctx.globalAlpha = Math.min(1, ps * 1.6);
+  ctx.translate(x + 14, y + 31); ctx.rotate(spin); ctx.scale(p.dir * 1.35 * ps, 1.35 * ps); ctx.translate(0, -23);
+  melenaAtras(hair, hairD, hairL, o);
+
+  const leg = (px, dy) => {                                     // pierna + bota
+    ctx.fillStyle = blk; rr(px, 32 + dy, 6, 11, 2);
+    ctx.fillStyle = fold; ctx.fillRect(px + 2, 33 + dy, 1, 8);
+    ctx.fillStyle = boot; rr(px - 1, 41 + dy, 9, 6, 2);
+    ctx.fillStyle = "#3a3540"; ctx.fillRect(px - 1, 45.5 + dy, 9, 1.5);
+    ctx.fillStyle = "#6a6572"; ctx.fillRect(px + 3, 42 + dy, 2, 1); ctx.fillRect(px + 3, 44 + dy, 2, 1);
+  };
+  leg(-6 + (air ? 3 : sw), air ? -3 : 0); leg(1 + (air ? -2 : -sw), 0);
+
+  ctx.fillStyle = blk; rr(-9, 16, 18, 20, 4);                   // chaqueta negra
+  ctx.fillStyle = "#2a2632"; ctx.beginPath(); ctx.moveTo(-3, 16); ctx.lineTo(3, 16); ctx.lineTo(0, 25); ctx.fill(); // camiseta
+  ctx.strokeStyle = fold; ctx.lineWidth = 1; ctx.beginPath();   // solapas
+  ctx.moveTo(-3, 16); ctx.lineTo(-6, 23); ctx.moveTo(3, 16); ctx.lineTo(6, 23); ctx.stroke();
+  ctx.strokeStyle = "#8b8794"; ctx.beginPath(); ctx.moveTo(0, 25); ctx.lineTo(0, 35); ctx.stroke(); // cierre
+  ctx.fillStyle = fold; ctx.fillRect(-8, 17, 5, 2);
+  ctx.fillStyle = boot; ctx.fillRect(-9, 34, 18, 3);            // cinturón
+  ctx.fillStyle = "#b9b4c2"; ctx.fillRect(-2, 34, 4, 3);
+
+  const arm = (side, ang) => {                                  // brazo con manga y mano
+    ctx.save(); ctx.translate(side * 9.5, 19); ctx.rotate(ang);
+    ctx.fillStyle = blk; rr(-3, 0, 6, 12, 3);
+    ctx.fillStyle = fold; ctx.fillRect(-3, 9, 6, 2);
+    ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(0, 13.5, 2.6, 0, 7); ctx.fill();
+    ctx.restore();
+  };
+  arm(-1, air ? -0.9 : sw * 0.09); arm(1, air ? 0.7 : -sw * 0.09);
+
+  ctx.fillStyle = skin; ctx.fillRect(-2, 13, 4, 4);             // cuello
+  ctx.fillStyle = blk; ctx.fillRect(-3, 14, 6, 2);              // gargantilla
+  ctx.fillStyle = "#d9c07a"; ctx.fillRect(-0.5, 16, 1, 1.5);
+  ctx.fillStyle = skin; ctx.beginPath(); ctx.arc(0, 8, 9, 0, 7); ctx.fill();   // cabeza
+  ctx.beginPath(); ctx.arc(-8, 9.5, 1.8, 0, 7); ctx.fill();     // oreja
+  ctx.fillStyle = "#d9c07a"; ctx.beginPath(); ctx.arc(-8, 12.2, 1, 0, 7); ctx.fill(); // arete
+  ctx.fillStyle = "rgba(230,110,120,.35)"; ctx.beginPath(); ctx.arc(4.5, 12.5, 2, 0, 7); ctx.fill(); // rubor
+  melenaFrente(hair, hairD, hairL, o);
+  ctx.strokeStyle = hairD; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(2, 6); ctx.lineTo(6.5, 5.6); ctx.stroke(); // ceja
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(4.4, 9, 2.2, 2.5, 0, 0, 7); ctx.fill();   // ojo
+  ctx.fillStyle = "#3a1c1c"; ctx.beginPath(); ctx.arc(4.9, 9.2, 1.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(5.4, 8.6, 0.5, 0, 7); ctx.fill();
+  ctx.strokeStyle = "#1a0d0d"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(2, 7.3); ctx.lineTo(6.9, 7.3); ctx.stroke(); // pestañas
+  ctx.fillStyle = shade; ctx.fillRect(7.6, 11, 1, 1.2);         // nariz
+  ctx.strokeStyle = "#b83a4c"; ctx.lineWidth = 1.3; ctx.beginPath();
+  ctx.moveTo(4, 14.6); ctx.quadraticCurveTo(5.5, 16, 7, 14.6); ctx.stroke(); // boca
+  ctx.restore();
+}
+function melenaAtras(c, d, l, o) {   // capas traseras onduladas a la altura del hombro
+  const ax = o.x, ay = o.y, m = Math.min(1.8, (Math.abs(o.vx) + Math.abs(o.vy)) * .8 + .3);
+  const rp = i => Math.sin(t / 6 + i * 1.7) * m;
+  ctx.fillStyle = d; ctx.beginPath(); ctx.moveTo(-12, 2);
+  ctx.quadraticCurveTo(-16 + ax * .5, 11 + ay * .3, -13 + ax, 20 + ay + rp(0));
+  ctx.quadraticCurveTo(-10 + ax, 25 + ay, -7 + ax, 19 + ay + rp(1));
+  ctx.quadraticCurveTo(-4 + ax, 24 + ay, -1 + ax, 18 + ay + rp(2));
+  ctx.quadraticCurveTo(2 + ax, 23 + ay, 5 + ax, 17 + ay + rp(3));
+  ctx.quadraticCurveTo(9 + ax * .5, 19 + ay * .5, 10, 9); ctx.lineTo(10, 2); ctx.fill();
+  ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-11, 3);
+  ctx.quadraticCurveTo(-14 + ax * .4, 10, -11 + ax * .8, 18 + ay * .8 + rp(4));
+  ctx.quadraticCurveTo(-8 + ax * .8, 21 + ay * .8, -5 + ax * .8, 16 + ay * .8 + rp(5));
+  ctx.quadraticCurveTo(-2 + ax * .8, 20 + ay * .8, 1 + ax * .8, 15 + ay * .8);
+  ctx.quadraticCurveTo(5 + ax * .4, 17 + ay * .4, 8, 10); ctx.lineTo(8, 3); ctx.fill();
+  ctx.strokeStyle = l; ctx.lineWidth = 0.8; ctx.beginPath();
+  ctx.moveTo(-9, 6); ctx.quadraticCurveTo(-11 + ax * .3, 12, -9 + ax * .6, 16 + ay * .6); ctx.stroke();
+}
+function melenaFrente(c, d, l, o) {  // volumen, cortina y mechones desfilados
+  const ax = o.x, ay = o.y, b = ay * .25;
+  ctx.fillStyle = c; ctx.beginPath(); ctx.arc(0, 6, 10.5, Math.PI, 0); ctx.fill();
+  for (const [bx, by, br] of [[-7, -1, 5], [0, -4, 5.5], [7, -1, 4.5]]) { ctx.beginPath(); ctx.arc(bx + ax * .1, by + b, br, 0, 7); ctx.fill(); }
+  ctx.beginPath(); ctx.moveTo(-11, 4); ctx.quadraticCurveTo(-15 + ax * .4, 12, -12 + ax * .7, 19 + ay * .5);
+  ctx.quadraticCurveTo(-10 + ax * .7, 21 + ay * .5, -9 + ax * .5, 16); ctx.quadraticCurveTo(-8 + ax * .4, 19, -6, 16); ctx.lineTo(-7, 6); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(10, 4); ctx.quadraticCurveTo(13 + ax * .2, 11, 10 + ax * .3, 16 + ay * .3);
+  ctx.quadraticCurveTo(8, 17, 8, 12); ctx.lineTo(8, 5); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-10, 0); ctx.quadraticCurveTo(-8, 8, -4, 11); ctx.quadraticCurveTo(-3, 6, 0, 2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(10, 0); ctx.quadraticCurveTo(9, 5, 7, 7); ctx.quadraticCurveTo(4, 5, 0, 2); ctx.fill();
+  ctx.strokeStyle = d; ctx.lineWidth = 1; ctx.beginPath();
+  ctx.moveTo(-5, -3 + b); ctx.quadraticCurveTo(-3, 2, -6, 7); ctx.moveTo(3, -4 + b); ctx.quadraticCurveTo(5, 1, 2, 4);
+  ctx.moveTo(-12, 9); ctx.quadraticCurveTo(-13 + ax * .3, 13, -11 + ax * .5, 16); ctx.stroke();
+  ctx.strokeStyle = l; ctx.lineWidth = 0.8; ctx.beginPath();
+  ctx.moveTo(-2, -5 + b); ctx.quadraticCurveTo(2, -4 + b, 5, -1 + b); ctx.stroke();
+}
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); }
+function texto(str, x, y, maxW, lh, align) {
+  ctx.textAlign = align || "left"; let yy = y;
+  for (const par of str.split("\n")) {
+    let line = "";
+    for (const w of par.split(" ")) {
+      const test = line ? line + " " + w : w;
+      if (ctx.measureText(test).width > maxW && line) { ctx.fillText(line, x, yy); yy += lh; line = w; }
+      else line = test;
+    }
+    ctx.fillText(line, x, yy); yy += lh;
+  }
+}
+function hud() {
+  ctx.save(); ctx.shadowColor = "rgba(20,10,40,.85)"; ctx.shadowBlur = 6;
+  ctx.font = "italic 18px Georgia, serif"; ctx.fillStyle = "#ffe3e6"; ctx.textAlign = "left";
+  if (HEARTS.length) ctx.fillText("♥ " + gotH + " / " + HEARTS.length, 20, 32);
+  else if (MENSAJES.length) ctx.fillText("♥ " + shown + " / " + MENSAJES.length, 20, 32);
+  ctx.save(); ctx.textAlign = "right"; ctx.globalAlpha = 0.55; ctx.font = "14px Georgia, serif";
+  ctx.fillText((Snd.muted() ? "♪ silencio · M" : "♪ M") + "  ·  Esc: menú", W - 20, 32);
+  if (Snd.estado() === "falta" && musMsgT-- > 0) { ctx.globalAlpha = 0.9; ctx.fillStyle = "#ffd98a"; ctx.fillText("♪ No encuentro musica.mp3 junto al index.html", W - 20, 54); }
+  ctx.restore();
+  if (cpToast > 0) {
+    ctx.globalAlpha = Math.min(1, cpToast / 30, (200 - cpToast) / 15);
+    ctx.fillStyle = "rgba(20,10,30,.8)"; rr(W / 2 - 130, 150, 260, 34, 17);
+    ctx.fillStyle = "#ffd98a"; ctx.font = "16px Georgia, serif"; ctx.textAlign = "center";
+    ctx.fillText("Punto de control guardado", W / 2, 172); ctx.globalAlpha = 1;
+  }
+  if (msg) {
+    const a = Math.min(1, msg.t / 30, (480 - msg.t) / 30);
+    ctx.globalAlpha = Math.max(0, a);
+    ctx.fillStyle = "rgba(20,10,30,.82)"; rr(120, 40, 720, 96, 14);
+    ctx.fillStyle = "#ffe3e6"; ctx.font = "22px Georgia, serif";
+    texto(msg.texto, W / 2, 84, 660, 30, "center");
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+}
+function titulo() {
+  TEMA = TEMA1; fondo();
+  ctx.fillStyle = "rgba(20,10,30,.55)"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#ffe3e6"; ctx.textAlign = "center";
+  ctx.font = "bold 76px Georgia, serif"; ctx.fillText(TITULO, W / 2, 210);
+  ctx.font = "italic 24px Georgia, serif"; ctx.fillText(SUBTITULO, W / 2, 262);
+  const pul = 1 + 0.03 * Math.sin(t / 15);                       // botón Jugar
+  ctx.save(); ctx.translate(W / 2, 352); ctx.scale(pul, pul);
+  ctx.fillStyle = "rgba(255,143,177,.25)"; rr(-136, -38, 272, 76, 38);
+  ctx.fillStyle = "#c95f79"; rr(-120, -31, 240, 62, 31);
+  ctx.fillStyle = "#ffe3e6"; ctx.font = "bold 30px Georgia, serif"; ctx.fillText("♥  Jugar", 0, 10);
+  ctx.restore();
+  ctx.globalAlpha = 0.6 + 0.4 * Math.sin(t / 20);
+  ctx.font = "18px Georgia, serif"; ctx.fillText("Presiona Enter o haz clic para jugar", W / 2, 430);
+  ctx.globalAlpha = 1; ctx.fillStyle = "#c9a9c0"; ctx.font = "16px Georgia, serif";
+  ctx.fillText("Flechas o A/D para moverte  ·  Espacio para saltar  ·  M: sonido  ·  C: elegir canción", W / 2, 486);
+}
+const CARD = { w: 300, h: 260, y: 150 }, BACK = { x: 24, y: H - 58, w: 120, h: 34 };
+const cardX = i => W / 2 + (i - (NIVELES.length - 1) / 2) * 340 - CARD.w / 2;
+function menuHit(e) {   // devuelve el nivel bajo el puntero, -2 = botón volver, -1 = nada
+  const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width, y = (e.clientY - r.top) * H / r.height;
+  for (let i = 0; i < NIVELES.length; i++) if (x >= cardX(i) && x <= cardX(i) + CARD.w && y >= CARD.y && y <= CARD.y + CARD.h) return i;
+  return (x >= BACK.x && x <= BACK.x + BACK.w && y >= BACK.y && y <= BACK.y + BACK.h) ? -2 : -1;
+}
+function menuClick(e) { const k = menuHit(e); if (k >= 0) { sel = k; start(k); } else if (k === -2) state = "title"; }
+function menuNiveles() {
+  TEMA = NIVELES[sel].tema; fondo();
+  ctx.fillStyle = "rgba(20,10,30,.6)"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#ffe3e6"; ctx.textAlign = "center"; ctx.font = "bold 44px Georgia, serif"; ctx.fillText("Elige un nivel", W / 2, 96);
+  NIVELES.forEach((N, i) => {
+    const x = cardX(i), y = CARD.y, on = i === sel, cx = x + CARD.w / 2, cy = y + CARD.h / 2;
+    ctx.save(); ctx.translate(cx, cy); const sc = on ? 1.05 + 0.01 * Math.sin(t / 12) : 0.95; ctx.scale(sc, sc); ctx.translate(-cx, -cy);
+    ctx.globalAlpha = on ? 1 : 0.65;
+    ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, CARD.w, CARD.h, 18); ctx.clip();
+    const g = ctx.createLinearGradient(0, y, 0, y + CARD.h); g.addColorStop(0, N.tema.cielo[0]); g.addColorStop(.6, N.tema.cielo[1]); g.addColorStop(1, N.tema.cielo[2]);
+    ctx.fillStyle = g; ctx.fillRect(x, y, CARD.w, CARD.h);
+    ctx.fillStyle = N.tema.estrellas ? "#7d1c17" : "#fff3c4"; ctx.beginPath(); ctx.arc(x + 220, y + 60, 26, 0, 7); ctx.fill();
+    for (let k = 0; k < 2; k++) {                                   // colinas de la miniatura
+      ctx.fillStyle = N.tema.colinas[k]; ctx.beginPath(); ctx.moveTo(x, y + CARD.h);
+      for (let xx = 0; xx <= CARD.w; xx += 10) ctx.lineTo(x + xx, y + 150 + k * 25 - (40 - k * 12) * Math.abs(Math.sin((xx + k * 90) / 55)));
+      ctx.lineTo(x + CARD.w, y + CARD.h); ctx.fill();
+    }
+    ctx.fillStyle = N.tema.top; ctx.fillRect(x + 40, y + 150, 90, 8); ctx.fillRect(x + 160, y + 120, 70, 8);   // plataformas de adorno
+    ctx.fillStyle = "rgba(20,10,30,.72)"; ctx.fillRect(x, y + CARD.h - 78, CARD.w, 78);
+    ctx.restore();
+    ctx.lineWidth = on ? 4 : 2; ctx.strokeStyle = on ? "#ffe3e6" : "rgba(255,227,230,.4)"; ctx.beginPath(); ctx.roundRect(x, y, CARD.w, CARD.h, 18); ctx.stroke();
+    ctx.fillStyle = "#ffe3e6"; ctx.textAlign = "center";
+    ctx.font = "bold 28px Georgia, serif"; ctx.fillText(N.nombre, cx, y + CARD.h - 40);
+    ctx.font = "italic 18px Georgia, serif"; ctx.fillText(N.sub, cx, y + CARD.h - 14);
+    ctx.restore();
+  });
+  ctx.globalAlpha = 0.6 + 0.4 * Math.sin(t / 20); ctx.fillStyle = "#ffe3e6"; ctx.font = "italic 18px Georgia, serif"; ctx.textAlign = "center";
+  ctx.fillText("← → para elegir  ·  Enter o clic para jugar", W / 2, 462); ctx.globalAlpha = 1;
+  ctx.fillStyle = "rgba(255,227,230,.15)"; rr(BACK.x, BACK.y, BACK.w, BACK.h, 17);
+  ctx.fillStyle = "#ffe3e6"; ctx.font = "16px Georgia, serif"; ctx.fillText("← Volver", BACK.x + BACK.w / 2, BACK.y + 23);
+}
+let letterY = 0, cartaL = null, cartaH = 0, letterDone = false, letterDrag = null;
+function cartaLayout() {   // divide la carta en líneas (una sola vez)
+  ctx.font = "19px Georgia, serif"; const L = [];
+  for (const par of cartaActual.split("\n")) {
+    if (!par.trim()) { L.push(null); continue; }
+    let line = "";
+    for (const w of par.split(" ")) {
+      const tt = line ? line + " " + w : w;
+      if (ctx.measureText(tt).width > 500 && line) { L.push(line); line = w; } else line = tt;
+    }
+    L.push(line);
+  }
+  cartaL = L; cartaH = L.reduce((h, l) => h + (l === null ? 14 : 27), 0);
+}
+function carta() {
+  if (!cartaL) cartaLayout();
+  const a = Math.min(1, letterT / 60), oy = (1 - a) * 30, vx = 230, vy = 112, vw = 500, vh = 350;
+  const max = Math.max(0, cartaH - vh + 24);
+  if (letterT <= 1) letterY = 0;
+  letterY = Math.max(0, Math.min(max, letterY)); letterDone = letterY >= max - 4;
+  ctx.globalAlpha = a; ctx.fillStyle = "rgba(15,8,25,.7)"; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#fbf1e2"; rr(190, 30 + oy, 580, 480, 8);
+  ctx.fillStyle = "#c95f79"; ctx.fillRect(190, 30 + oy, 580, 8);
+  ctx.fillStyle = "#4a2a3a"; ctx.font = "bold 28px Georgia, serif";
+  ctx.textAlign = "center"; ctx.fillText(cartaTituloAct, W / 2, 90 + oy);
+  ctx.save(); ctx.beginPath(); ctx.rect(vx - 10, vy + oy, vw + 20, vh); ctx.clip();
+  ctx.font = "19px Georgia, serif"; ctx.textAlign = "left"; ctx.fillStyle = "#4a2a3a";
+  let y = vy + oy + 20 - letterY;
+  for (const l of cartaL) {
+    if (l === null) { y += 14; continue; }
+    if (y > vy + oy - 30 && y < vy + oy + vh + 30) ctx.fillText(l, vx, y);
+    y += 27;
+  }
+  ctx.restore();
+  let g = ctx.createLinearGradient(0, vy + oy, 0, vy + oy + 22);   // bordes suaves arriba y abajo
+  g.addColorStop(0, "#fbf1e2"); g.addColorStop(1, "rgba(251,241,226,0)"); ctx.fillStyle = g; ctx.fillRect(vx - 10, vy + oy, vw + 20, 22);
+  g = ctx.createLinearGradient(0, vy + oy + vh - 22, 0, vy + oy + vh);
+  g.addColorStop(0, "rgba(251,241,226,0)"); g.addColorStop(1, "#fbf1e2"); ctx.fillStyle = g; ctx.fillRect(vx - 10, vy + oy + vh - 22, vw + 20, 22);
+  if (max > 0) {                                                   // barra de avance
+    const th = Math.max(30, vh * vh / (cartaH + 24));
+    ctx.fillStyle = "rgba(154,122,138,.25)"; ctx.fillRect(752, vy + oy, 4, vh);
+    ctx.fillStyle = "rgba(201,95,121,.8)"; rr(752, vy + oy + (vh - th) * (letterY / max), 4, th, 2);
+  }
+  if (letterT > 120) {
+    ctx.font = "italic 15px Georgia, serif"; ctx.fillStyle = "#9a7a8a"; ctx.textAlign = "center";
+    ctx.globalAlpha = a * (0.65 + 0.35 * Math.sin(t / 20));
+    ctx.fillText(letterDone ? "Enter para continuar" : "↑ ↓ o la rueda del mouse para seguir leyendo", W / 2, 490 + oy);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function draw() {
+  if (state === "title") return titulo();
+  if (state === "levels") return menuNiveles();
+  fondo(); plataformas(); marcador(); corazones();
+  if (state === "portal") portal(openP);
+  if (state === "revive") { angel(true); personaje(); angel(false); }
+  else if (state !== "dead" && !(state === "portal" && ps <= 0.02)) personaje();
+  if (state === "final" || state === "portal") angel(true);
+  if (state === "final" || state === "end") hombre(npcA, Math.max(0, Math.min(1, (fT - 400) / 20)));
+  if (state === "portal") hombre(npcA, 1);
+  sobre(); destello(); dialogos();
+  hud();
+  if (state === "dead") muerte();
+  if (state === "end") carta();
+  if (state === "portal" && swal >= 60) tunel(swal - 60);
+}
+cargarNivel(0);
+(function loop() { update(); draw(); requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>
